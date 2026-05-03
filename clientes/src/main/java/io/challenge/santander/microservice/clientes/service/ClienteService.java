@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface ClienteService {
     Cliente getByCpf(String cpf);
+    Cliente getById(Long id);
     Cliente cadastrar(Cliente cliente);
     void remover(Long id);
     Cliente atualizar(Long id, Cliente cliente);

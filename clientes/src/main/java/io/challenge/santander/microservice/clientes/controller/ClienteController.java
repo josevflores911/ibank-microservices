@@ -62,4 +62,16 @@ public class ClienteController {
 
         return ResponseEntity.ok(lista);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ClienteResponseDTO> getClienteById(@PathVariable Long id) {
+        Cliente cliente = clienteService.getById(id);
+        return ResponseEntity.ok(ClienteMapper.toDTO(cliente));
+    }
+
+    @GetMapping("/cpf/{cpf}")
+    public ResponseEntity<ClienteResponseDTO> getClienteByCpf(@PathVariable String cpf) {
+        Cliente cliente = clienteService.getByCpf(cpf);
+        return ResponseEntity.ok(ClienteMapper.toDTO(cliente));
+    }
 }

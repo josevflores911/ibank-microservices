@@ -26,6 +26,13 @@ public class ClienteServiceImpl implements ClienteService {
                         new ResourceNotFoundException("Cliente não encontrado com CPF: " + cpf));
     }
 
+    @Override
+    public Cliente getById(Long id) {
+        return clienteRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Cliente não encontrado com ID: " + id));
+    }
+
 
     @Override
     public Cliente cadastrar(Cliente cliente) {

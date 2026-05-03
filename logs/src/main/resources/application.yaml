@@ -38,9 +38,7 @@ ibank:
     kafka:
       topics:
         logs: 'ibank.logs'
-        pedidos-pagos: 'ibank.pedidos-pagos'
-        pedidos-faturados: 'ibank.pedidos-faturados'
-        pedidos-enviados: 'ibank.pedidos-enviados'
+        transacao-notificacao: 'ibank.transacao-notificacao'
 
 server:
   port: 8085
