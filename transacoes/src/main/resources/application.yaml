@@ -22,7 +22,7 @@ spring:
   kafka:
     bootstrap-servers: 'http://localhost:29092'
     consumer:
-      group-id: icompras-atualizacao-pedido
+      group-id: ibank-atualizacao-pedido
       auto-offset-reset: earliest
 
 server:
@@ -49,7 +49,7 @@ ibank:
     kafka:
       server-url: 'http://localhost:29092'
       topics:
-        pedidos-pagos: 'icompras.pedidos-pagos'
-        pedidos-faturados: 'icompras.pedidos-faturados'
-        pedidos-enviados: 'icompras.pedidos-enviados'
-        logs: 'icompras.logs'
+        pedidos-pagos: 'ibank.pedidos-pagos'
+        pedidos-faturados: 'ibank.pedidos-faturados'
+        pedidos-enviados: 'ibank.pedidos-enviados'
+        logs: 'ibank.logs'

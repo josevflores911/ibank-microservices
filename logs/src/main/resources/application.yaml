@@ -1,3 +1,51 @@
 spring:
   application:
     name: logs
+
+  # H2 in-memory database
+  datasource:
+    url: jdbc:h2:mem:logsdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+
+  # Kafka consumer configuration
+  kafka:
+    bootstrap-servers: 'http://localhost:29092'
+    consumer:
+      group-id: ibank-log-service
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+# Kafka topics to subscribe (all existing system topics + dedicated logs topic)
+ibank:
+  config:
+    kafka:
+      topics:
+        logs: 'ibank.logs'
+        pedidos-pagos: 'ibank.pedidos-pagos'
+        pedidos-faturados: 'ibank.pedidos-faturados'
+        pedidos-enviados: 'ibank.pedidos-enviados'
+
+server:
+  port: 8085
+
+# Logging
+logging:
+  level:
+    io.challenge.santander.microservice.logs: INFO

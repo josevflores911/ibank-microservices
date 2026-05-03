@@ -14,6 +14,7 @@ public class RoutesValidator {
                 .route(r -> r.path("/contas/**").uri("http://localhost:8082"))
                 .route(r -> r.path("/investimentos/**").uri("http://localhost:8083"))
                 .route(r -> r.path("/transacoes/**").uri("http://localhost:8084"))
+                .route(r -> r.path("/logs/**").uri("http://localhost:8085"))
 
                 .build();
     }
