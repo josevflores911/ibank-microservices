@@ -8,6 +8,7 @@ public class ClienteMapper {
         Cliente c = new Cliente();
         c.setNome(dto.nome());
         c.setCpf(dto.cpf());
+        c.setCep(dto.cep());
         c.setEndereco(dto.endereco());
         c.setEmail(dto.email());
         return c;

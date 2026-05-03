@@ -26,9 +26,7 @@ public class ClienteController {
     public ResponseEntity<ClienteResponseDTO> cadastrarCliente(
             @RequestBody @Valid ClienteRequestDTO dto) {
 
-        Cliente cliente = clienteService.cadastrar(
-                ClienteMapper.toEntity(dto)
-        );
+        Cliente cliente = clienteService.cadastrar(ClienteMapper.toEntity(dto));
 
         return ResponseEntity
                 .created(URI.create("/clientes/" + cliente.getId()))
@@ -48,10 +46,7 @@ public class ClienteController {
             @PathVariable Long id,
             @RequestBody @Valid ClienteRequestDTO dto) {
 
-        Cliente atualizado = clienteService.atualizar(
-                id,
-                ClienteMapper.toEntity(dto)
-        );
+        Cliente atualizado = clienteService.atualizar(id,ClienteMapper.toEntity(dto));
 
         return ResponseEntity.ok(ClienteMapper.toDTO(atualizado));
     }

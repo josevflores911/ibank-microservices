@@ -11,6 +11,8 @@ public record ClienteRequestDTO(
         @NotBlank(message = "CPF e obrigatorio")
         String cpf,
 
+
+        String cep,
         String endereco,
 
         @Email(message = "Email inválido")

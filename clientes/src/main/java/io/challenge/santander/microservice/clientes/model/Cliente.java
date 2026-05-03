@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -28,7 +29,11 @@ public class Cliente {
     @Email(message = "O email deve ser válido.")
     private String email;
 
-    @NotBlank(message = "O endereco é obrigatório.")
+    @Size(max = 8, message = "O CEP deve ter no máximo 8 caracteres")
+    @NotBlank(message = "O CEP é obrigatório.")
+    private String cep;
+
+//    @NotBlank(message = "O endereco é obrigatório.")
     private String endereco;
 
     private LocalDateTime dataCadastro;

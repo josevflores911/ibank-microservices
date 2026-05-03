@@ -1,5 +1,6 @@
 package io.challenge.santander.microservice.clientes.service.impl;
 
+import io.challenge.santander.microservice.clientes.clients.CepClient;
 import io.challenge.santander.microservice.clientes.exceptions.BusinessException;
 import io.challenge.santander.microservice.clientes.exceptions.ResourceNotFoundException;
 import io.challenge.santander.microservice.clientes.model.Cliente;
@@ -16,6 +17,7 @@ import java.util.List;
 public class ClienteServiceImpl implements ClienteService {
 
     private final ClienteRepository clienteRepository;
+    private final CepClient cepClient;
 
     @Override
     public Cliente getByCpf(String cpf) {
@@ -32,6 +34,15 @@ public class ClienteServiceImpl implements ClienteService {
         clienteRepository.findByCpf(cliente.getCpf())
                 .ifPresent(c ->
                 { throw new BusinessException("CPF já cadastrado"); });
+
+
+        try {
+            var endereco = cepClient.buscar(cliente.getCep()); // valida CEP, se inválido lança FeignException
+            cliente.setEndereco(endereco.logradouro() + ", " + endereco.bairro() + ", " + endereco.localidade() + " - " + endereco.uf());
+        } catch (Exception e) {
+            throw new BusinessException("CEP inválido");
+        }
+
 
         cliente.setId(null); // asegura que es nuevo
         cliente.setDataCadastro(LocalDateTime.now());
