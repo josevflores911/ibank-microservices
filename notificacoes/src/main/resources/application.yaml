@@ -7,12 +7,13 @@ spring:
       group-id: ibank-notificacao
       auto-offset-reset: earliest
 
-icompras:
+ibank:
   config:
     kafka:
       topics:
         transacao-notificacao: 'ibank.transacao-notificacao'
-
+  jasper:
+    output-path: C:/Users/user/Desktop/challenge/info/jasperfiles
 
 server:
   port: 8086

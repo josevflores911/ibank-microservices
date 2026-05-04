@@ -15,10 +15,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class NotaFiscalService {
@@ -29,60 +26,86 @@ public class NotaFiscalService {
     @Value("classpath:reports/logo.png")
     private Resource logo;
 
+    @Value("${ibank.jasper.output-path}")
+    private String outputPath;
+
     public void gerarESalvarNotaTransacao(TransacaoEventRepresentation transacao) {
+
         try (InputStream inputStream = notaFiscal.getInputStream()) {
 
+
+            if (outputPath == null || outputPath.isBlank()) {
+                throw new IllegalStateException("Path de saída não configurado");
+            }
+
+
+            Path path = Paths.get(outputPath);
+            if (!Files.exists(path)) {
+                Files.createDirectories(path);
+                System.out.println("Diretório criado: " + outputPath);
+            }
+
+            // 🧾 parámetros
             Map<String, Object> params = new HashMap<>();
 
-            // Preenchendo dados dinamicos recebidos da transação
-            params.put("NOME", transacao.getNomeCliente() != null ? transacao.getNomeCliente() : "Cliente Conta " + transacao.getNumeroConta());
-            String cpf = transacao.getCpf() != null ? transacao.getCpf() : "00000000000";
-            
+            String cpf = Optional.ofNullable(transacao.getCpf()).orElse("00000000000");
+
+            params.put("NOME",
+                    Optional.ofNullable(transacao.getNomeCliente())
+                            .orElse("Cliente Conta " + transacao.getNumeroConta()));
+
             params.put("CPF", cpf);
-            params.put("LOGRADOURO", transacao.getLogradouro() != null ? transacao.getLogradouro() : "Não informado");
+            params.put("LOGRADOURO", Optional.ofNullable(transacao.getLogradouro()).orElse("Não informado"));
             params.put("NUMERO", "S/N");
             params.put("BAIRRO", "N/A");
-            params.put("EMAIL", transacao.getEmail() != null ? transacao.getEmail() : "cliente@banco.com");
+            params.put("EMAIL", Optional.ofNullable(transacao.getEmail()).orElse("cliente@banco.com"));
             params.put("TELEFONE", "(00) 00000-0000");
-            params.put("DATA_TRANSACAO", LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
-            params.put("TOTAL", new BigDecimal(transacao.getValor().toString()));
+
+            params.put("DATA_TRANSACAO",
+                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
+
+            params.put("TOTAL",
+                    new BigDecimal(transacao.getValor().toString()));
 
             params.put("LOGO", logo.getFile().getAbsolutePath());
 
-            // Mapeia a transação como um item do relatório
-            ItemTransacaoReport itemTransacao = new ItemTransacaoReport(
+
+            ItemTransacaoReport item = new ItemTransacaoReport(
+
                     transacao.getNumeroConta(),
                     transacao.getTipo(),
                     new BigDecimal(transacao.getValor().toString()),
-
-                    new BigDecimal(transacao.getValor().toString())
+                    new BigDecimal(transacao.getValor().toString()),
+                    new BigDecimal((transacao.getValor().toString())),
+                    0
             );
-            var dataSource = new JRBeanCollectionDataSource(List.of(itemTransacao));
 
-            JasperReport jasperReport = JasperCompileManager.compileReport(inputStream);
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, dataSource);
+            JRBeanCollectionDataSource dataSource =
+                    new JRBeanCollectionDataSource(List.of(item));
 
-            byte[] pdfBytes = JasperExportManager.exportReportToPdf(jasperPrint);
 
-            // Salvando localmente
-            String folderPath = System.getProperty("user.home") + "/Desktop/nota-fiscal";
-            Path path = Paths.get(folderPath);
+            JasperReport jasperReport =
+                    JasperCompileManager.compileReport(inputStream);
 
-            if (!Files.exists(path)) {
-                Files.createDirectories(path);
-                System.out.println("Diretório criado: " + folderPath);
-            }
+            JasperPrint jasperPrint =
+                    JasperFillManager.fillReport(jasperReport, params, dataSource);
 
-            // Usa um ID unico e o cpf no nome do arquivo
+            byte[] pdfBytes =
+                    JasperExportManager.exportReportToPdf(jasperPrint);
+
+
             String idTransacao = UUID.randomUUID().toString().substring(0, 8);
             String fileName = "nota-fiscal-" + cpf + "-" + idTransacao + ".pdf";
+
             Path filePath = path.resolve(fileName);
 
+
             Files.write(filePath, pdfBytes);
+
             System.out.println("Nota fiscal salva em: " + filePath.toAbsolutePath());
 
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao gerar/salvar nota fiscal da transação", e);
+            throw new RuntimeException("Erro ao gerar/salvar nota fiscal", e);
         }
     }
 }

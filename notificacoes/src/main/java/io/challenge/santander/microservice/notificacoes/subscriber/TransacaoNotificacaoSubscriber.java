@@ -17,7 +17,7 @@ public class TransacaoNotificacaoSubscriber {
     private final ObjectMapper objectMapper;
     private final NotaFiscalService notaFiscalService;
 
-    @KafkaListener(topics = "${icompras.config.kafka.topics.transacao-notificacao}", groupId = "ibank-notificacao")
+    @KafkaListener(topics = "${ibank.config.kafka.topics.transacao-notificacao}", groupId = "ibank-notificacao")
     public void onMessage(String mensagem) {
         try {
             TransacaoEventRepresentation transacao = objectMapper.readValue(mensagem, TransacaoEventRepresentation.class);

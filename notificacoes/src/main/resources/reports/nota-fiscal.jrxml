@@ -8,14 +8,15 @@
 	<parameter name="BAIRRO" class="java.lang.String"/>
 	<parameter name="EMAIL" class="java.lang.String"/>
 	<parameter name="TELEFONE" class="java.lang.String"/>
-	<parameter name="DATA_PEDIDO" class="java.lang.String"/>
-	<parameter name="TOTAL_PEDIDO" class="java.math.BigDecimal"/>
+	<parameter name="DATA_TRANSACAO" class="java.lang.String"/>
+	<parameter name="TOTAL" class="java.math.BigDecimal"/>
 	<parameter name="LOGO" class="java.lang.String"/>
-	<field name="codigo" class="java.lang.Long"/>
-	<field name="nome" class="java.lang.String"/>
+	<field name="conta" class="java.lang.Long"/>
+	<field name="tipo" class="java.lang.String"/>
 	<field name="quantidade" class="java.lang.Integer"/>
-	<field name="valorUnitario" class="java.math.BigDecimal"/>
+	<field name="valor" class="java.math.BigDecimal"/>
 	<field name="total" class="java.math.BigDecimal"/>
+	<field name="inicial" class="java.math.BigDecimal"/>
 	<background splitType="Stretch"/>
 	<title height="79" splitType="Stretch">
 		<element kind="image" uuid="baf432ed-acd9-4f11-8952-f15ddb71a20a" x="180" y="0" width="200" height="79" onErrorType="Blank">

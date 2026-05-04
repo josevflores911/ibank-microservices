@@ -1,5 +1,6 @@
 package io.challenge.santander.microservice.notificacoes.service;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.Files;
@@ -12,10 +13,17 @@ import java.util.stream.Collectors;
 @Service
 public class PesquisaArquivoService {
 
+    @Value("${ibank.jasper.output-path}")
+    private String outputPath;
+
     public List<Path> buscarNotasPorCpf(String cpf) {
         try {
-            String folderPath = System.getProperty("user.home") + "/Desktop/nota-fiscal";
-            Path path = Paths.get(folderPath);
+
+            if (outputPath == null || outputPath.isBlank()) {
+                throw new IllegalStateException("Path de saída não configurado");
+            }
+
+            Path path = Paths.get(outputPath);
 
             if (!Files.exists(path)) {
                 return Collections.emptyList();

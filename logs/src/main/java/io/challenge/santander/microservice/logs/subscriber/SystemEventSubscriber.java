@@ -21,9 +21,9 @@ public class SystemEventSubscriber {
     @KafkaListener(
             groupId = "${spring.kafka.consumer.group-id}",
             topics = {
-                    "${ibank.config.kafka.topics.pedidos-pagos}",
-                    "${ibank.config.kafka.topics.pedidos-faturados}",
-                    "${ibank.config.kafka.topics.pedidos-enviados}"
+                    "${ibank.config.kafka.topics.transacao-notificacao}"
+//                    , "${ibank.config.kafka.topics.pedidos-faturados}",
+//                    "${ibank.config.kafka.topics.pedidos-enviados}"
             }
     )
     public void receiveSystemEvent(ConsumerRecord<String, String> record) {

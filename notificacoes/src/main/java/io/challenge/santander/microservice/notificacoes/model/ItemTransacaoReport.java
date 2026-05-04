@@ -11,6 +11,7 @@ public class ItemTransacaoReport {
     private Long conta;
     private String tipo;
     private BigDecimal valor;
-
     private BigDecimal total;
+    private BigDecimal inicial;
+    private Integer quantidade;
 }
